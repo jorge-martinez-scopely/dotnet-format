@@ -7,21 +7,23 @@ function buildOptions(): FormatOptions {
   const folder: string = getInput("folder");
   const workspace: string = getInput("workspace");
 
-  let formatOptions: FormatOptions = {onlyChangedFiles: onlyChangedFiles};
+  const formatOptions: FormatOptions = {
+    onlyChangedFiles,
+  };
 
   if (folder !== undefined && folder != "") {
     formatOptions.folder = folder;
   } else if (workspace !== undefined && workspace != "") {
     formatOptions.workspace = workspace;
   }
-  
+
   return formatOptions;
 }
 
 export async function check(): Promise<void> {
   const failFast = getInput("fail-fast") === "true";
 
-  let formatOptions = buildOptions();
+  const formatOptions = buildOptions();
   formatOptions.dryRun = true;
 
   const result = await format(formatOptions);
@@ -35,7 +37,7 @@ export async function check(): Promise<void> {
 }
 
 export async function fix(): Promise<void> {
-  let formatOptions = buildOptions();
+  const formatOptions = buildOptions();
   formatOptions.dryRun = false;
 
   const result = await format(formatOptions);

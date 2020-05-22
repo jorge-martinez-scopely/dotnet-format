@@ -8,10 +8,10 @@ import { getPullRequestFiles } from "./files";
 import type { ExecOptions } from "@actions/exec/lib/interfaces";
 
 export interface FormatOptions {
-  onlyChangedFiles: boolean,
-  dryRun?: boolean,
-  workspace?: string,
-  folder?: string
+  onlyChangedFiles: boolean;
+  dryRun?: boolean;
+  workspace?: string;
+  folder?: string;
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
