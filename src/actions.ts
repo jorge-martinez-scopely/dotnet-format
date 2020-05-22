@@ -1,15 +1,30 @@
 import { getInput, setOutput } from "@actions/core";
 
-import { format } from "./dotnet";
+import {format, FormatOptions} from "./dotnet";
+
+function buildOptions(): FormatOptions {
+  const onlyChangedFiles = getInput("only-changed-files") === "true";
+  const folder: string = getInput("folder");
+  const workspace: string = getInput("workspace");
+
+  let formatOptions: FormatOptions = {onlyChangedFiles: onlyChangedFiles};
+
+  if (folder !== undefined && folder != "") {
+    formatOptions.folder = folder;
+  } else if (workspace !== undefined && workspace != "") {
+    formatOptions.workspace = workspace;
+  }
+  
+  return formatOptions;
+}
 
 export async function check(): Promise<void> {
-  const onlyChangedFiles = getInput("only-changed-files") === "true";
   const failFast = getInput("fail-fast") === "true";
 
-  const result = await format({
-    dryRun: true,
-    onlyChangedFiles,
-  });
+  let formatOptions = buildOptions();
+  formatOptions.dryRun = true;
+
+  const result = await format(formatOptions);
 
   setOutput("has-changes", result.toString());
 
@@ -20,12 +35,10 @@ export async function check(): Promise<void> {
 }
 
 export async function fix(): Promise<void> {
-  const onlyChangedFiles = getInput("only-changed-files") === "true";
+  let formatOptions = buildOptions();
+  formatOptions.dryRun = false;
 
-  const result = await format({
-    dryRun: false,
-    onlyChangedFiles,
-  });
+  const result = await format(formatOptions);
 
   setOutput("has-changes", result.toString());
 }

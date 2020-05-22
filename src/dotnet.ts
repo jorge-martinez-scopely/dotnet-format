@@ -8,8 +8,10 @@ import { getPullRequestFiles } from "./files";
 import type { ExecOptions } from "@actions/exec/lib/interfaces";
 
 export interface FormatOptions {
-  dryRun: boolean;
-  onlyChangedFiles: boolean;
+  onlyChangedFiles: boolean,
+  dryRun?: boolean,
+  workspace?: string,
+  folder?: string
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
@@ -49,6 +51,12 @@ export async function format(options: FormatOptions): Promise<boolean> {
     }
 
     dotnetFormatOptions.push("--files", filesToCheck.join(","));
+  }
+
+  if (options.folder !== undefined && options.folder != "") {
+    dotnetFormatOptions.push("--folder", options.folder);
+  } else if (options.workspace !== undefined && options.workspace != "") {
+    dotnetFormatOptions.push("--workspace ", options.workspace);
   }
 
   const dotnetPath: string = await which("dotnet", true);
