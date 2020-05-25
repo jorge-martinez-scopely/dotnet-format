@@ -54,9 +54,9 @@ export async function format(options: FormatOptions): Promise<boolean> {
   }
 
   if (options.folder !== undefined && options.folder != "") {
-    dotnetFormatOptions.push("--folder ", options.folder);
+    dotnetFormatOptions.push("--folder", options.folder);
   } else if (options.workspace !== undefined && options.workspace != "") {
-    dotnetFormatOptions.push("--workspace ", options.workspace);
+    dotnetFormatOptions.push("--workspace", options.workspace);
   }
 
   const dotnetPath: string = await which("dotnet", true);
