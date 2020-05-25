@@ -50,77 +50,14 @@ jobs:
         uses: xt0rted/dotnet-tool-restore@v1
 
       - name: Run dotnet format
-        uses: xt0rted/dotnet-format@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          only-changed-files: "true"
-```
-
-Running on demand by pull request comment, triggered by the text `/dotnet format`.
-
-> ℹ The provided `GITHUB_TOKEN` will not trigger additional workflows.
-> To push fixes back to the pull request branch you'll need to [setup a secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) with a [Personal Access Token](https://github.com/settings/tokens/new?scopes=repo&description=github%20actions) that has the `repo` scope.
-
-```yml
-name: Format on slash command
-on:
-  issue_comment:
-    types: created
-jobs:
-  dotnet-format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for command
-        id: command
-        uses: xt0rted/slash-command-action@v1
-        continue-on-error: true
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          command: dotnet
-          reaction-type: "eyes"
-
-      - name: Get branch info
-        if: steps.command.outputs.command-name
-        id: comment-branch
-        uses: xt0rted/pull-request-comment-branch@v1
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout repo
-        if: steps.command.outputs.command-name
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.comment-branch.outputs.ref }}
-          persist-credentials: false
-
-      - name: Restore dotnet tools
-        if: steps.command.outputs.command-name
-        uses: xt0rted/dotnet-tool-restore@v1
-
-      - name: Run dotnet format
-        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format'
         id: format
-        uses: xt0rted/dotnet-format@v1
+        uses: victor-alcazar/dotnet-format@v1.0.2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           action: "fix"
-          only-changed-files: true
+          only-changed-files: false
+          folder: "src"
 
-      - name: Commit files
-        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -a -m 'Automated dotnet-format update
-
-          Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
-
-      - name: Push changes
-        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
-        uses: ad-m/github-push-action@v0.5.0
-        with:
-          branch: ${{ steps.comment-branch.outputs.ref }}
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 ```
 
 ## Options
@@ -138,6 +75,8 @@ Name | Allowed values | Description
 `action` | `check` (default), `fix` | The primary action dotnet-format should perform.
 `only-changed-files` | `true`, `false` (default) | Only changed files in the current pull request should be formatted.
 `fail-fast` | `true` (default), `false` | The job should fail if there's a formatting error. Only used with the `check` action.
+`workspace` | `.` | The solution or project file to operate on.
+`folder` | `.` | The folder to operate on. Cannot be used with the `--workspace` option.
 
 ## Outputs
 
