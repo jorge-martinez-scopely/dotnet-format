@@ -2854,10 +2854,10 @@ function format(options) {
             dotnetFormatOptions.push("--files", filesToCheck.join(","));
         }
         if (options.folder !== undefined && options.folder != "") {
-            dotnetFormatOptions.push("--folder ", options.folder);
+            dotnetFormatOptions.push("--folder", options.folder);
         }
         else if (options.workspace !== undefined && options.workspace != "") {
-            dotnetFormatOptions.push("--workspace ", options.workspace);
+            dotnetFormatOptions.push("--workspace", options.workspace);
         }
         const dotnetPath = yield io_1.which("dotnet", true);
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
