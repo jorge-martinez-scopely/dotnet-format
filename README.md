@@ -33,6 +33,7 @@ jobs:
           action: "fix"
           only-changed-files: false
           folder: "src"
+          exclude: "exclude_file,exclude_folder"
 
 ```
 
@@ -53,6 +54,7 @@ Name | Allowed values | Description
 `fail-fast` | `true` (default), `false` | The job should fail if there's a formatting error. Only used with the `check` action.
 `workspace` | `.` | The solution or project file to operate on.
 `folder` | `.` | The folder to operate on. Cannot be used with the `--workspace` option.
+`exclude` | `.` | Comma separated files and/or folders to ignore.
 
 ## Outputs
 
