@@ -35,6 +35,10 @@ inputs:
     description: "The solution or project file to operate on"
     required: false
 
+  exclude:
+    description: "Option to ignore given files/folders"
+    required: false
+
 outputs:
   has-changes:
     description: "A value indicating if any files were formatted"

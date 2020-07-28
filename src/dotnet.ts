@@ -12,6 +12,7 @@ export interface FormatOptions {
   dryRun?: boolean;
   workspace?: string;
   folder?: string;
+  exclude?: string;
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
@@ -58,6 +59,10 @@ export async function format(options: FormatOptions): Promise<boolean> {
   } else if (options.workspace !== undefined && options.workspace != "") {
     dotnetFormatOptions.push("--workspace", options.workspace);
   }
+
+  if (options.exclude !== undefined && options.exclude != "") {
+    dotnetFormatOptions.push("--exclude", options.exclude);
+  } 
 
   const dotnetPath: string = await which("dotnet", true);
   const dotnetResult = await exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);

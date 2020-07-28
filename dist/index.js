@@ -1257,6 +1257,7 @@ function buildOptions() {
     const onlyChangedFiles = core_1.getInput("only-changed-files") === "true";
     const folder = core_1.getInput("folder");
     const workspace = core_1.getInput("workspace");
+    const exclude = core_1.getInput("exclude");
     const formatOptions = {
         onlyChangedFiles,
     };
@@ -1265,6 +1266,9 @@ function buildOptions() {
     }
     else if (workspace !== undefined && workspace != "") {
         formatOptions.workspace = workspace;
+    }
+    if (exclude !== undefined && exclude != "") {
+        formatOptions.exclude = exclude;
     }
     return formatOptions;
 }
@@ -2858,6 +2862,9 @@ function format(options) {
         }
         else if (options.workspace !== undefined && options.workspace != "") {
             dotnetFormatOptions.push("--workspace", options.workspace);
+        }
+        if (options.exclude !== undefined && options.exclude != "") {
+            dotnetFormatOptions.push("--exclude", options.exclude);
         }
         const dotnetPath = yield io_1.which("dotnet", true);
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);

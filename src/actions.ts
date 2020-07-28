@@ -6,6 +6,7 @@ function buildOptions(): FormatOptions {
   const onlyChangedFiles = getInput("only-changed-files") === "true";
   const folder: string = getInput("folder");
   const workspace: string = getInput("workspace");
+  const exclude: string = getInput("exclude");
 
   const formatOptions: FormatOptions = {
     onlyChangedFiles,
@@ -16,6 +17,10 @@ function buildOptions(): FormatOptions {
   } else if (workspace !== undefined && workspace != "") {
     formatOptions.workspace = workspace;
   }
+
+  if (exclude !== undefined && exclude != "") {
+    formatOptions.exclude = exclude;
+  } 
 
   return formatOptions;
 }
