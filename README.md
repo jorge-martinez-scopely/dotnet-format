@@ -62,6 +62,11 @@ Name | Description
 -- | --
 `has-changes` | If any files were found to have violations or had fixes applied. Will be a string value of `true` or `false`.
 
+# Building from source
+
+## Generating `dist/index.js`
+`npm run release`
+
 ## License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
