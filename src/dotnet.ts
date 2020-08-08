@@ -68,7 +68,7 @@ export async function format(options: FormatOptions): Promise<boolean> {
   }
 
   const dotnetPath: string = await which("dotnet", true);
-  const dotnetCheckResult = await exec(`"${dotnetPath}"`, ["format", "--check"], execOptions);
+  const dotnetCheckResult = await exec(`"${dotnetPath}"`, ["format", "--check", options.workspace ?? ""], execOptions);
 
   info(`dotnet format check result ${dotnetCheckResult}`);
 

@@ -2843,6 +2843,7 @@ function formatOnlyChangedFiles(onlyChangedFiles) {
     return false;
 }
 function format(options) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const execOptions = {
             ignoreReturnCode: true,
@@ -2871,7 +2872,7 @@ function format(options) {
             dotnetFormatOptions.push("--verbosity", options.logLevel);
         }
         const dotnetPath = yield io_1.which("dotnet", true);
-        const dotnetCheckResult = yield exec_1.exec(`"${dotnetPath}"`, ["format", "--check"], execOptions);
+        const dotnetCheckResult = yield exec_1.exec(`"${dotnetPath}"`, ["format", "--check", (_a = options.workspace) !== null && _a !== void 0 ? _a : ""], execOptions);
         core_1.info(`dotnet format check result ${dotnetCheckResult}`);
         if ((dotnetCheckResult === 0)) {
             core_1.info("No files that need formatting, exiting");
