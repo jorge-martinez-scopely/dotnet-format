@@ -2847,9 +2847,8 @@ function format(options) {
         if (options.workspace !== undefined && options.workspace != "") {
             dotnetFormatOptions.push(options.workspace);
         }
-        //dotnetFormatOptions.push("--check");
         if (options.dryRun) {
-            dotnetFormatOptions.push("--dry-run");
+            dotnetFormatOptions.push("--check");
         }
         if (formatOnlyChangedFiles(options.onlyChangedFiles)) {
             const filesToCheck = yield files_1.getPullRequestFiles();

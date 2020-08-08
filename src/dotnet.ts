@@ -40,10 +40,8 @@ export async function format(options: FormatOptions): Promise<boolean> {
     dotnetFormatOptions.push(options.workspace);
   }
 
-  //dotnetFormatOptions.push("--check");
-
   if (options.dryRun) {
-    dotnetFormatOptions.push("--dry-run");
+    dotnetFormatOptions.push("--check");
   }
 
   if (formatOnlyChangedFiles(options.onlyChangedFiles)) {
