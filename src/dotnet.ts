@@ -68,8 +68,18 @@ export async function format(options: FormatOptions): Promise<boolean> {
   }
 
   const dotnetPath: string = await which("dotnet", true);
+  const dotnetCheckResult = await exec(`"${dotnetPath}"`, ["format", "--check"], execOptions);
+
+  info(`dotnet format check result ${dotnetCheckResult}`);
+
+  if ((dotnetCheckResult === 0)) {
+    info("No files that need formatting, exiting");
+
+    return false;
+  }
+
   const dotnetResult = await exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
   
   info(`dotnet format return code ${dotnetResult}`);
-  return !!(dotnetResult > 0);
+  return !!dotnetResult;
 }
