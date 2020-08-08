@@ -2847,7 +2847,7 @@ function format(options) {
         if (options.workspace !== undefined && options.workspace != "") {
             dotnetFormatOptions.push(options.workspace);
         }
-        dotnetFormatOptions.push("--check");
+        //dotnetFormatOptions.push("--check");
         if (options.dryRun) {
             dotnetFormatOptions.push("--dry-run");
         }
