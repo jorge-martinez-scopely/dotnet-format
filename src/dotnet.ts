@@ -11,7 +11,7 @@ export interface FormatOptions {
   onlyChangedFiles: boolean;
   dryRun?: boolean;
   workspace?: string;
-  folder?: string;
+  include?: string;
   exclude?: string;
 }
 
@@ -51,13 +51,13 @@ export async function format(options: FormatOptions): Promise<boolean> {
       return false;
     }
 
-    dotnetFormatOptions.push("--files", filesToCheck.join(","));
+    dotnetFormatOptions.push("--include", filesToCheck.join(" "));
   }
 
   if (options.folder !== undefined && options.folder != "") {
     dotnetFormatOptions.push("--folder", options.folder);
   } else if (options.workspace !== undefined && options.workspace != "") {
-    dotnetFormatOptions.push("--workspace", options.workspace);
+    dotnetFormatOptions.push("", options.workspace);
   }
 
   if (options.exclude !== undefined && options.exclude != "") {
