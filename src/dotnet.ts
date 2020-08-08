@@ -36,6 +36,10 @@ export async function format(options: FormatOptions): Promise<boolean> {
 
   const dotnetFormatOptions = ["format", "--check"];
 
+  if (options.workspace !== undefined && options.workspace != "") {
+    dotnetFormatOptions.push(options.workspace);
+  }
+
   if (options.dryRun) {
     dotnetFormatOptions.push("--dry-run");
   }
@@ -52,10 +56,6 @@ export async function format(options: FormatOptions): Promise<boolean> {
     }
 
     dotnetFormatOptions.push("--include", filesToCheck.join(" "));
-  }
-
-  if (options.workspace !== undefined && options.workspace != "") {
-    dotnetFormatOptions.push("", options.workspace);
   }
 
   if (options.exclude !== undefined && options.exclude != "") {

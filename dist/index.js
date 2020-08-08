@@ -2844,6 +2844,9 @@ function format(options) {
             ignoreReturnCode: true,
         };
         const dotnetFormatOptions = ["format", "--check"];
+        if (options.workspace !== undefined && options.workspace != "") {
+            dotnetFormatOptions.push(options.workspace);
+        }
         if (options.dryRun) {
             dotnetFormatOptions.push("--dry-run");
         }
@@ -2856,9 +2859,6 @@ function format(options) {
                 return false;
             }
             dotnetFormatOptions.push("--include", filesToCheck.join(" "));
-        }
-        if (options.workspace !== undefined && options.workspace != "") {
-            dotnetFormatOptions.push("", options.workspace);
         }
         if (options.exclude !== undefined && options.exclude != "") {
             dotnetFormatOptions.push("--exclude", options.exclude);
