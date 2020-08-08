@@ -2,8 +2,10 @@ name: "dotnet-format"
 
 description: "Run dotnet format and optionally apply any fixes"
 
-author: "xt0rted"
-
+author: 
+  - "xt0rted"
+  - "jfversluis"
+  
 branding:
   icon: "file-text"
   color: "purple"
@@ -27,8 +29,8 @@ inputs:
     required: false
     default: "true"
 
-  folder:
-    description: "The folder to operate on. Cannot be used with the `--workspace` option"
+  include:
+    description: "The files to include, delimited by space. Cannot be used with the `--workspace` option"
     required: false
 
   workspace:
