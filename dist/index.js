@@ -2843,10 +2843,11 @@ function format(options) {
         const execOptions = {
             ignoreReturnCode: true,
         };
-        const dotnetFormatOptions = ["format", "--check"];
+        const dotnetFormatOptions = ["format"];
         if (options.workspace !== undefined && options.workspace != "") {
             dotnetFormatOptions.push(options.workspace);
         }
+        dotnetFormatOptions.push("--check");
         if (options.dryRun) {
             dotnetFormatOptions.push("--dry-run");
         }

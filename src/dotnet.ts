@@ -34,11 +34,13 @@ export async function format(options: FormatOptions): Promise<boolean> {
     ignoreReturnCode: true,
   };
 
-  const dotnetFormatOptions = ["format", "--check"];
+  const dotnetFormatOptions = ["format"];
 
   if (options.workspace !== undefined && options.workspace != "") {
     dotnetFormatOptions.push(options.workspace);
   }
+
+  dotnetFormatOptions.push("--check");
 
   if (options.dryRun) {
     dotnetFormatOptions.push("--dry-run");
