@@ -4,6 +4,7 @@ description: "Run dotnet format and optionally apply any fixes"
 
 author: 
   - "xt0rted"
+  - "victor-alcazar"
   - "jfversluis"
   
 branding:
