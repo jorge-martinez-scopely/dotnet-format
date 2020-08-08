@@ -1,7 +1,7 @@
 # GitHub Action for dotnet-format
 
-[![CI Workflow Status](https://github.com/xt0rted/dotnet-format/workflows/CI/badge.svg)](https://github.com/xt0rted/dotnet-format/actions?query=workflow%3ACI)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=xt0rted/dotnet-format)](https://dependabot.com)
+[![CI Workflow Status](https://github.com/jfversluis/dotnet-format/workflows/CI/badge.svg)](https://github.com/jfversluis/dotnet-format/actions?query=workflow%3ACI)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=jfversluis/dotnet-format)](https://dependabot.com)
 
 Run [dotnet-format](https://github.com/dotnet/format) as part of your workflow to report formatting errors or auto fix violations as part of your pull request workflow.
 
@@ -27,7 +27,7 @@ jobs:
 
       - name: Run dotnet format
         id: format
-        uses: victor-alcazar/dotnet-format@v1.0.2
+        uses: jfversluis/dotnet-format@v1.0.4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           action: "fix"
@@ -55,6 +55,7 @@ Name | Allowed values | Description
 `workspace` | `.` | The solution or project file to operate on.
 `folder` | `.` | The folder to operate on. Cannot be used with the `--workspace` option.
 `exclude` | `.` | Comma separated files and/or folders to ignore.
+`logLevel` | `q[uiet]`, `m[inimal]`, `n[ormal]`, `d[etailed]`,  `diag[nostic]` | Sets the logging verbosity of the dotnet format process
 
 ## Outputs
 
