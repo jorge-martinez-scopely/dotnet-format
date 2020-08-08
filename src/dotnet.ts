@@ -54,9 +54,7 @@ export async function format(options: FormatOptions): Promise<boolean> {
     dotnetFormatOptions.push("--include", filesToCheck.join(" "));
   }
 
-  if (options.folder !== undefined && options.folder != "") {
-    dotnetFormatOptions.push("--folder", options.folder);
-  } else if (options.workspace !== undefined && options.workspace != "") {
+  if (options.workspace !== undefined && options.workspace != "") {
     dotnetFormatOptions.push("", options.workspace);
   }
 
