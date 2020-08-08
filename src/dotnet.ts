@@ -13,6 +13,7 @@ export interface FormatOptions {
   workspace?: string;
   include?: string;
   exclude?: string;
+  logLevel?: string;
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
@@ -60,10 +61,15 @@ export async function format(options: FormatOptions): Promise<boolean> {
 
   if (options.exclude !== undefined && options.exclude != "") {
     dotnetFormatOptions.push("--exclude", options.exclude);
-  } 
+  }
+
+  if (options.logLevel !== undefined && options.logLevel != "") {
+    dotnetFormatOptions.push("--verbosity", options.logLevel);
+  }
 
   const dotnetPath: string = await which("dotnet", true);
   const dotnetResult = await exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
-
-  return !!dotnetResult;
+  
+  info(`dotnet format return code ${dotnetResult}`);
+  return !!(dotnetResult > 0);
 }

@@ -7,6 +7,7 @@ function buildOptions(): FormatOptions {
   const include: string = getInput("include");
   const workspace: string = getInput("workspace");
   const exclude: string = getInput("exclude");
+  const logLevel: string = getInput("log-level");
 
   const formatOptions: FormatOptions = {
     onlyChangedFiles,
@@ -18,9 +19,12 @@ function buildOptions(): FormatOptions {
     formatOptions.workspace = workspace;
   }
 
+  if (logLevel !== undefined && logLevel != "") {
+    formatOptions.logLevel = logLevel;
+  }
+
   if (exclude !== undefined && exclude != "") {
-    formatOptions.exclude = exclude;
-  } 
+  }
 
   return formatOptions;
 }

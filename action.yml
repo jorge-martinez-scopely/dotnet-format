@@ -3,9 +3,9 @@ name: "dotnet-format"
 description: "Run dotnet format and optionally apply any fixes"
 
 author: 
+  - "jfversluis"
   - "xt0rted"
   - "victor-alcazar"
-  - "jfversluis"
   
 branding:
   icon: "file-text"
@@ -40,6 +40,10 @@ inputs:
 
   exclude:
     description: "Option to ignore given files/folders"
+    required: false
+
+  logLevel:
+    description: "Sets the logging verbosity of the dotnet format process. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]"
     required: false
 
 outputs:

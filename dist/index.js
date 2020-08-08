@@ -1258,6 +1258,7 @@ function buildOptions() {
     const include = core_1.getInput("include");
     const workspace = core_1.getInput("workspace");
     const exclude = core_1.getInput("exclude");
+    const logLevel = core_1.getInput("log-level");
     const formatOptions = {
         onlyChangedFiles,
     };
@@ -1267,8 +1268,10 @@ function buildOptions() {
     else if (workspace !== undefined && workspace != "") {
         formatOptions.workspace = workspace;
     }
+    if (logLevel !== undefined && logLevel != "") {
+        formatOptions.logLevel = logLevel;
+    }
     if (exclude !== undefined && exclude != "") {
-        formatOptions.exclude = exclude;
     }
     return formatOptions;
 }
@@ -2863,9 +2866,13 @@ function format(options) {
         if (options.exclude !== undefined && options.exclude != "") {
             dotnetFormatOptions.push("--exclude", options.exclude);
         }
+        if (options.logLevel !== undefined && options.logLevel != "") {
+            dotnetFormatOptions.push("--verbosity", options.logLevel);
+        }
         const dotnetPath = yield io_1.which("dotnet", true);
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
-        return !!dotnetResult;
+        core_1.info(`dotnet format return code ${dotnetResult}`);
+        return !!(dotnetResult > 0);
     });
 }
 exports.format = format;
