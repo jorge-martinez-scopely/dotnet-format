@@ -4,7 +4,7 @@ import {format, FormatOptions} from "./dotnet";
 
 function buildOptions(): FormatOptions {
   const onlyChangedFiles = getInput("only-changed-files") === "true";
-  const folder: string = getInput("folder");
+  const include: string = getInput("include");
   const workspace: string = getInput("workspace");
   const exclude: string = getInput("exclude");
 
@@ -12,8 +12,8 @@ function buildOptions(): FormatOptions {
     onlyChangedFiles,
   };
 
-  if (folder !== undefined && folder != "") {
-    formatOptions.folder = folder;
+  if (include !== undefined && include != "") {
+    formatOptions.include = include;
   } else if (workspace !== undefined && workspace != "") {
     formatOptions.workspace = workspace;
   }
