@@ -1268,10 +1268,11 @@ function buildOptions() {
     else if (workspace !== undefined && workspace != "") {
         formatOptions.workspace = workspace;
     }
+    if (exclude !== undefined && exclude != "") {
+        formatOptions.exclude = exclude;
+    }
     if (logLevel !== undefined && logLevel != "") {
         formatOptions.logLevel = logLevel;
-    }
-    if (exclude !== undefined && exclude != "") {
     }
     return formatOptions;
 }
