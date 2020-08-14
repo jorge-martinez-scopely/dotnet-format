@@ -81,5 +81,6 @@ export async function format(options: FormatOptions): Promise<boolean> {
   const dotnetResult = await exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
   
   info(`dotnet format return code ${dotnetResult}`);
-  return !!dotnetResult;
+  //return !!dotnetResult;
+  return dotnetResult == 0;
 }

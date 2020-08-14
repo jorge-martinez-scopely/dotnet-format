@@ -2879,7 +2879,8 @@ function format(options) {
         // }
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
         core_1.info(`dotnet format return code ${dotnetResult}`);
-        return !!dotnetResult;
+        //return !!dotnetResult;
+        return dotnetResult == 0;
     });
 }
 exports.format = format;
