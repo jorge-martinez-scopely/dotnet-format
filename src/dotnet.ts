@@ -55,6 +55,7 @@ export async function format(options: FormatOptions): Promise<boolean> {
       debug("No files found for formatting");
       return false;
     }
+    dotnetFormatOptions.push("-f");
 
     dotnetFormatOptions.push("--include", filesToCheck.join(" "));
   }
