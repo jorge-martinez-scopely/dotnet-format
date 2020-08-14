@@ -33,6 +33,7 @@ function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
 export async function format(options: FormatOptions): Promise<boolean> {
   const execOptions: ExecOptions = {
     ignoreReturnCode: true,
+    windowsVerbatimArguments: true
   };
 
   const dotnetFormatOptions = ["format"];
