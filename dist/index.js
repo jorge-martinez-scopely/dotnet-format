@@ -2846,6 +2846,7 @@ function format(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const execOptions = {
             ignoreReturnCode: true,
+            windowsVerbatimArguments: true
         };
         const dotnetFormatOptions = ["format"];
         if (options.workspace !== undefined && options.workspace != "") {
