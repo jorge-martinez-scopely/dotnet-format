@@ -1,4 +1,4 @@
-name: "dotnet format"
+name: "dotnet-format-action"
 
 description: "Run dotnet format and optionally apply any fixes"
 

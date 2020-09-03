@@ -5,6 +5,7 @@ import { which } from "@actions/io";
 import { getPullRequestFiles } from "./files";
 
 import type { ExecOptions } from "@actions/exec/lib/interfaces";
+import { error } from "console";
 
 export interface FormatOptions {
   onlyChangedFiles: boolean;
@@ -78,43 +79,43 @@ export async function format(options: FormatOptions): Promise<boolean> {
 
   // When NOT doing only a dry-run we inspect the actual changed files
   if (!options.dryRun) {
-    info(`Checking changed files`);
+    info("Checking changed files");
 
     // Check if there are any changed files
-    const stdout: string[] = []
-    const stderr: string[] = []
+    const stdout: string[] = [];
+    const stderr: string[] = [];
 
     const gitExecOptions: ExecOptions = {
       ignoreReturnCode: true,
       listeners: {
         stdout: (data: Buffer) => {
-          stdout.push(data.toString())
+          stdout.push(data.toString());
         },
         stderr: (data: Buffer) => {
-          stderr.push(data.toString())
-        }
-      }
+          stderr.push(data.toString());
+        },
+      },
     };
 
     await exec("git", ["status", "-s"], gitExecOptions);
 
     if (stderr.join("") != "") {
-      setFailed("Errors while checking git status for changed files. Error: " + stderr)
+      error("Errors while checking git status for changed files. Error: " + stderr);
     }
 
     if (stdout.join("") == "") {
-      info(`Did not find any changed files`);
+      info("Did not find any changed files");
 
-      return false
+      return false;
     }
 
-    info(`Found changed files`);
+    info("Found changed files");
     return true;
   }
   // else, we can just return rely on the exit code of the dotnet format process
   else
   {
-    info(`dotnet format return code ${dotnetResult}`);
+    info("dotnet format return code ${dotnetResult}");
     return !!dotnetResult;
   }
 }

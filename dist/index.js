@@ -1305,6 +1305,13 @@ exports.fix = fix;
 
 /***/ }),
 
+/***/ 82:
+/***/ (function(module) {
+
+module.exports = require("console");
+
+/***/ }),
+
 /***/ 87:
 /***/ (function(module) {
 
@@ -2834,6 +2841,7 @@ const exec_1 = __webpack_require__(986);
 const github_1 = __webpack_require__(469);
 const io_1 = __webpack_require__(1);
 const files_1 = __webpack_require__(556);
+const console_1 = __webpack_require__(82);
 function formatOnlyChangedFiles(onlyChangedFiles) {
     if (onlyChangedFiles) {
         if (github_1.context.eventName === "issue_comment" || github_1.context.eventName === "pull_request") {
@@ -2881,7 +2889,7 @@ function format(options) {
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
         // When NOT doing only a dry-run we inspect the actual changed files
         if (!options.dryRun) {
-            core_1.info(`Checking changed files`);
+            core_1.info("Checking changed files");
             // Check if there are any changed files
             const stdout = [];
             const stderr = [];
@@ -2893,23 +2901,23 @@ function format(options) {
                     },
                     stderr: (data) => {
                         stderr.push(data.toString());
-                    }
-                }
+                    },
+                },
             };
             yield exec_1.exec("git", ["status", "-s"], gitExecOptions);
             if (stderr.join("") != "") {
-                core_1.setFailed("Errors while checking git status for changed files. Error: " + stderr);
+                console_1.error("Errors while checking git status for changed files. Error: " + stderr);
             }
             if (stdout.join("") == "") {
-                core_1.info(`Did not find any changed files`);
+                core_1.info("Did not find any changed files");
                 return false;
             }
-            core_1.info(`Found changed files`);
+            core_1.info("Found changed files");
             return true;
         }
         // else, we can just return rely on the exit code of the dotnet format process
         else {
-            core_1.info(`dotnet format return code ${dotnetResult}`);
+            core_1.info("dotnet format return code ${dotnetResult}");
             return !!dotnetResult;
         }
     });
