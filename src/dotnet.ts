@@ -1,8 +1,7 @@
-import { debug, info, warning } from "@actions/core";
+import { debug, info, warning, setFailed } from "@actions/core";
 import { exec } from "@actions/exec";
 import { context } from "@actions/github";
 import { which } from "@actions/io";
-
 import { getPullRequestFiles } from "./files";
 
 import type { ExecOptions } from "@actions/exec/lib/interfaces";
@@ -11,6 +10,7 @@ export interface FormatOptions {
   onlyChangedFiles: boolean;
   dryRun?: boolean;
   workspace?: string;
+  workspaceIsFolder?: boolean;
   include?: string;
   exclude?: string;
   logLevel?: string;
@@ -40,6 +40,10 @@ export async function format(options: FormatOptions): Promise<boolean> {
 
   if (options.workspace !== undefined && options.workspace != "") {
     dotnetFormatOptions.push(options.workspace);
+
+    if (options.workspaceIsFolder) {
+      dotnetFormatOptions.push("-f");
+    }
   }
 
   if (options.dryRun) {
@@ -70,19 +74,47 @@ export async function format(options: FormatOptions): Promise<boolean> {
   }
 
   const dotnetPath: string = await which("dotnet", true);
-  // const dotnetCheckResult = await exec(`"${dotnetPath}"`, ["format", "--check", options.workspace ?? ""], execOptions);
-
-  // info(`dotnet format check result ${dotnetCheckResult}`);
-
-  // if ((dotnetCheckResult === 0)) {
-  //   info("No files that need formatting, exiting");
-
-  //   return false;
-  // }
-
   const dotnetResult = await exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
-  
-  info(`dotnet format return code ${dotnetResult}`);
-  //return !!dotnetResult;
-  return dotnetResult == 0;
+
+  // When NOT doing only a dry-run we inspect the actual changed files
+  if (!options.dryRun) {
+    info(`Checking changed files`);
+
+    // Check if there are any changed files
+    const stdout: string[] = []
+    const stderr: string[] = []
+
+    const gitExecOptions: ExecOptions = {
+      ignoreReturnCode: true,
+      listeners: {
+        stdout: (data: Buffer) => {
+          stdout.push(data.toString())
+        },
+        stderr: (data: Buffer) => {
+          stderr.push(data.toString())
+        }
+      }
+    };
+
+    const gitstatusResult = await exec(`git`, ['status', '-s'], gitExecOptions);
+
+    if (stderr.join('') != '') {
+      setFailed('Errors while checking git status for changed files. Error: ' + stderr)
+    }
+
+    if (stdout.join('') == '') {
+      info(`Did not find any changed files`);
+
+      return false
+    }
+
+    info(`Found changed files`);
+    return true;
+  }
+  // else, we can just return rely on the exit code of the dotnet format process
+  else
+  {
+    info(`dotnet format return code ${dotnetResult}`);
+    return !!dotnetResult;
+  }
 }
