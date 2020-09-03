@@ -1257,6 +1257,7 @@ function buildOptions() {
     const onlyChangedFiles = core_1.getInput("only-changed-files") === "true";
     const include = core_1.getInput("include");
     const workspace = core_1.getInput("workspace");
+    const workspaceIsFolder = core_1.getInput("workspaceIsFolder") === "true";
     const exclude = core_1.getInput("exclude");
     const logLevel = core_1.getInput("log-level");
     const formatOptions = {
@@ -2851,6 +2852,9 @@ function format(options) {
         const dotnetFormatOptions = ["format"];
         if (options.workspace !== undefined && options.workspace != "") {
             dotnetFormatOptions.push(options.workspace);
+            if (options.workspaceIsFolder) {
+                dotnetFormatOptions.push("-f");
+            }
         }
         if (options.dryRun) {
             dotnetFormatOptions.push("--check");
@@ -2873,12 +2877,6 @@ function format(options) {
             dotnetFormatOptions.push("--verbosity", options.logLevel);
         }
         const dotnetPath = yield io_1.which("dotnet", true);
-        // const dotnetCheckResult = await exec(`"${dotnetPath}"`, ["format", "--check", options.workspace ?? ""], execOptions);
-        // info(`dotnet format check result ${dotnetCheckResult}`);
-        // if ((dotnetCheckResult === 0)) {
-        //   info("No files that need formatting, exiting");
-        //   return false;
-        // }
         const dotnetResult = yield exec_1.exec(`"${dotnetPath}"`, dotnetFormatOptions, execOptions);
         // When NOT doing only a dry-run we inspect the actual changed files
         if (!options.dryRun) {
@@ -2911,7 +2909,7 @@ function format(options) {
         // else, we can just return rely on the exit code of the dotnet format process
         else {
             core_1.info(`dotnet format return code ${dotnetResult}`);
-            return dotnetResult != 0;
+            return !!dotnetResult;
         }
     });
 }
