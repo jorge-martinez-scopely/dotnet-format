@@ -1,40 +1,99 @@
 # GitHub Action for dotnet-format
 
 [![CI Workflow Status](https://github.com/jfversluis/dotnet-format/workflows/CI/badge.svg)](https://github.com/jfversluis/dotnet-format/actions?query=workflow%3ACI)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=jfversluis/dotnet-format)](https://dependabot.com)
 
 Run [dotnet-format](https://github.com/dotnet/format) as part of your workflow to report formatting errors or auto fix violations as part of your pull request workflow.
 
 ## Usage
 
-Running on `pull_request`.
+### Running on `pull_request`, adding a commit to the PR.
+Use this only when the PRs are coming from the same repository. You won't have permission to add commits to PRs coming from a forked repository.
 
 ```yml
 name: Format check on pull request
 on: pull_request
 jobs:
   dotnet-format:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
+      - name: Install dotnet-format
+        run: dotnet tool install -g dotnet-format
+
       - name: Checkout repo
         uses: actions/checkout@v2
-
-      - name: Add dotnet-format problem matcher
-        uses: xt0rted/dotnet-format-problem-matcher@v1
-
-      - name: Restore dotnet tools
-        uses: xt0rted/dotnet-tool-restore@v1
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Run dotnet format
         id: format
-        uses: jfversluis/dotnet-format@v1.0.4
+        uses: jfversluis/dotnet-format@v1.0.5
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           action: "fix"
-          only-changed-files: false
-          folder: "src"
-          exclude: "exclude_file,exclude_folder"
+          only-changed-files: true
 
+      - name: Commit files
+        if: steps.format.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update
+          Co-authored-by: ${{ github.event.pull_request.user.login }} <${{ github.event.pull_request.user.id }}+${{ github.event.pull_request.user.login }}@users.noreply.github.com>'
+      - name: Push changes
+        if: steps.format.outputs.has-changes == 'true'
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+
+```
+
+### Scheduled daily at midnight (UTC) and open a PR with the fixes
+You should use this if you run a OSS project with outside contributors. You won't have permission to add commits to PRs coming from a forked repository.
+
+```yml
+name: Daily code format check
+on:
+  schedule:
+    - cron: 0 0 * * * # Every day at midnight (UTC)
+jobs:
+  dotnet-format:
+    runs-on: windows-latest
+    steps:
+      - name: Install dotnet-format
+        run: dotnet tool install -g dotnet-format
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run dotnet format
+        id: format
+        uses: jfversluis/dotnet-format@v1.0.5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          action: "fix"
+          workspace: "MySolution.sln"
+    
+      - name: Commit files
+        if: steps.format.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update'
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: '[housekeeping] Automated PR to fix formatting errors'
+          body: |
+            Automated PR to fix formatting errors
+          committer: GitHub <noreply@github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          labels: housekeeping
+          assignees: jfversluis
+          reviewers: jfversluis
+          branch: housekeeping/fix-codeformatting
 ```
 
 ## Options
@@ -72,3 +131,7 @@ Name | Description
 ## License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
+
+## Acknowledgements
+
+Thank you @victor-alcazar and @xt0rted for the first versions that I have forked this from
