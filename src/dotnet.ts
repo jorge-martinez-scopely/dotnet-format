@@ -8,9 +8,9 @@ import type { ExecOptions } from "@actions/exec/lib/interfaces";
 
 export interface FormatOptions {
   onlyChangedFiles: boolean;
+  workspaceIsFolder?: boolean;
   dryRun?: boolean;
   workspace?: string;
-  workspaceIsFolder?: boolean;
   include?: string;
   exclude?: string;
   logLevel?: string;
@@ -33,7 +33,7 @@ function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
 export async function format(options: FormatOptions): Promise<boolean> {
   const execOptions: ExecOptions = {
     ignoreReturnCode: true,
-    windowsVerbatimArguments: true
+    windowsVerbatimArguments: true,
   };
 
   const dotnetFormatOptions = ["format"];
@@ -96,13 +96,13 @@ export async function format(options: FormatOptions): Promise<boolean> {
       }
     };
 
-    const gitstatusResult = await exec(`git`, ['status', '-s'], gitExecOptions);
+    await exec("git", ["status", "-s"], gitExecOptions);
 
-    if (stderr.join('') != '') {
-      setFailed('Errors while checking git status for changed files. Error: ' + stderr)
+    if (stderr.join("") != "") {
+      setFailed("Errors while checking git status for changed files. Error: " + stderr)
     }
 
-    if (stdout.join('') == '') {
+    if (stdout.join("") == "") {
       info(`Did not find any changed files`);
 
       return false

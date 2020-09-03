@@ -12,6 +12,7 @@ function buildOptions(): FormatOptions {
 
   const formatOptions: FormatOptions = {
     onlyChangedFiles,
+    workspaceIsFolder,
   };
 
   if (include !== undefined && include != "") {

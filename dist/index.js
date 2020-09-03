@@ -1262,6 +1262,7 @@ function buildOptions() {
     const logLevel = core_1.getInput("log-level");
     const formatOptions = {
         onlyChangedFiles,
+        workspaceIsFolder,
     };
     if (include !== undefined && include != "") {
         formatOptions.include = include;
@@ -2847,7 +2848,7 @@ function format(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const execOptions = {
             ignoreReturnCode: true,
-            windowsVerbatimArguments: true
+            windowsVerbatimArguments: true,
         };
         const dotnetFormatOptions = ["format"];
         if (options.workspace !== undefined && options.workspace != "") {
@@ -2895,11 +2896,11 @@ function format(options) {
                     }
                 }
             };
-            const gitstatusResult = yield exec_1.exec(`git`, ['status', '-s'], gitExecOptions);
-            if (stderr.join('') != '') {
-                core_1.setFailed('Errors while checking git status for changed files. Error: ' + stderr);
+            yield exec_1.exec("git", ["status", "-s"], gitExecOptions);
+            if (stderr.join("") != "") {
+                core_1.setFailed("Errors while checking git status for changed files. Error: " + stderr);
             }
-            if (stdout.join('') == '') {
+            if (stdout.join("") == "") {
                 core_1.info(`Did not find any changed files`);
                 return false;
             }
