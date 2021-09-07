@@ -75,7 +75,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           action: "fix"
           workspace: "MySolution.sln"
-    
+
       - name: Commit files
         if: steps.format.outputs.has-changes == 'true'
         run: |
@@ -116,6 +116,9 @@ Name | Allowed values | Description
 `include` | `.` | The files to include, delimited by space. Cannot be used together with the `workspace` option.
 `exclude` | `.` | Space delimited list of files and/or folders to ignore.
 `logLevel` | `q[uiet]`, `m[inimal]`, `n[ormal]`, `d[etailed]`,  `diag[nostic]` | Sets the logging verbosity of the dotnet format process
+`fix-whitespace` | `true`, `false` (default) | Removes whitespaces according to formatting rules.
+`fix-analyzers-level` | `info`, `warn`, `error` | Fixes styles from third-party analyzers. More on https://github.com/dotnet/format/blob/main/docs/3rd-party-analyzers.md.
+`fix-style-level` | `info`, `warn`, `error` | Fixes styles according to formating rules.
 
 ## Outputs
 

@@ -15,6 +15,9 @@ export interface FormatOptions {
   include?: string;
   exclude?: string;
   logLevel?: string;
+  fixWhitespace: boolean;
+  fixAnalyzersLevel?: string;
+  fixStyleLevel?: string;
 }
 
 function formatOnlyChangedFiles(onlyChangedFiles: boolean): boolean {
@@ -68,6 +71,18 @@ export async function format(options: FormatOptions): Promise<boolean> {
 
   if (options.exclude !== undefined && options.exclude != "") {
     dotnetFormatOptions.push("--exclude", options.exclude);
+  }
+
+  if (options.fixWhitespace) {
+    dotnetFormatOptions.push("--fix-whitespace");
+  }
+
+  if (options.fixAnalyzersLevel !== undefined && options.fixAnalyzersLevel != "") {
+    dotnetFormatOptions.push("--fix-analyzers", options.fixAnalyzersLevel);
+  }
+
+  if (options.fixStyleLevel !== undefined && options.fixStyleLevel != "") {
+    dotnetFormatOptions.push("--fix-style", options.fixStyleLevel);
   }
 
   if (options.logLevel !== undefined && options.logLevel != "") {

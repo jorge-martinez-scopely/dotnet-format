@@ -9,10 +9,14 @@ function buildOptions(): FormatOptions {
   const workspaceIsFolder = getInput("workspaceIsFolder") === "true";
   const exclude: string = getInput("exclude");
   const logLevel: string = getInput("log-level");
+  const fixWhitespace = getInput("fix-whitespace") === "true";
+  const fixAnalyzersLevel: string = getInput("fix-analyzers-level");
+  const fixStyleLevel: string = getInput("fix-style-level");
 
   const formatOptions: FormatOptions = {
     onlyChangedFiles,
     workspaceIsFolder,
+    fixWhitespace,
   };
 
   if (include !== undefined && include != "") {
@@ -28,7 +32,15 @@ function buildOptions(): FormatOptions {
   if (logLevel !== undefined && logLevel != "") {
     formatOptions.logLevel = logLevel;
   }
-  
+
+  if (fixAnalyzersLevel !== undefined && fixAnalyzersLevel != "") {
+    formatOptions.fixAnalyzersLevel = fixAnalyzersLevel;
+  }
+
+  if (fixStyleLevel !== undefined && fixStyleLevel != "") {
+    formatOptions.fixStyleLevel = fixStyleLevel;
+  }
+
   return formatOptions;
 }
 

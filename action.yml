@@ -2,11 +2,11 @@ name: "dotnet-format-action"
 
 description: "Run dotnet format and optionally apply any fixes"
 
-author: 
+author:
   - "jfversluis"
   - "xt0rted"
   - "victor-alcazar"
-  
+
 branding:
   icon: "file-text"
   color: "blue"
@@ -45,6 +45,18 @@ inputs:
 
   exclude:
     description: "The files to exclude, delimited by space."
+    required: false
+
+  fix-whitespace:
+    description: "Removes whitespaces according to formatting rules."
+    required: false
+
+  fix-analyzers-level:
+    description: "Fixes styles from third-party analyzers. More on https://github.com/dotnet/format/blob/main/docs/3rd-party-analyzers.md"
+    required: false
+
+  fix-style-level:
+    description: "Fixes styles according to formating rules."
     required: false
 
   logLevel:
