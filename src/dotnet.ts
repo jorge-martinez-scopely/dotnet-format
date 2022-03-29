@@ -43,11 +43,11 @@ export async function format(options: FormatOptions): Promise<boolean> {
   const dotnetFormatOptions = ["format"];
 
   if (options.workspace !== undefined && options.workspace != "") {
-    dotnetFormatOptions.push(options.workspace);
-
     if (options.workspaceIsFolder) {
       dotnetFormatOptions.push("-f");
     }
+    
+    dotnetFormatOptions.push(options.workspace);
   }
 
   if (options.dryRun) {
