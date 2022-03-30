@@ -1266,7 +1266,7 @@ function buildOptions() {
     const workspace = core_1.getInput("workspace");
     const workspaceIsFolder = core_1.getInput("workspaceIsFolder") === "true";
     const exclude = core_1.getInput("exclude");
-    const logLevel = core_1.getInput("log-level");
+    const logLevel = core_1.getInput("logLevel");
     const fixWhitespace = core_1.getInput("fix-whitespace") === "true";
     const fixAnalyzersLevel = core_1.getInput("fix-analyzers-level");
     const fixStyleLevel = core_1.getInput("fix-style-level");
