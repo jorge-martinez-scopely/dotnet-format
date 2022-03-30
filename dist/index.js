@@ -2932,10 +2932,10 @@ function format(options) {
         };
         const dotnetFormatOptions = ["format"];
         if (options.workspace !== undefined && options.workspace != "") {
-            dotnetFormatOptions.push(options.workspace);
             if (options.workspaceIsFolder) {
                 dotnetFormatOptions.push("-f");
             }
+            dotnetFormatOptions.push(options.workspace);
         }
         if (options.dryRun) {
             dotnetFormatOptions.push("--check");
